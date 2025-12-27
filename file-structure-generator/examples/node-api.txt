@@ -1,9 +1,0 @@
-my-node-api/
-├─ README.md
-├─ package.json
-├─ src/
-│  ├─ server.js
-│  └─ routes/
-│     ├─ user.js
-│     └─ auth.js
-└─ .gitignore
