@@ -1068,6 +1068,8 @@ class GitService:
                 if gitignore_patterns:
                     effective_ignores.extend(gitignore_patterns)
 
+                empty_dirs = []
+
                 if filepath.is_file():
                     file_size = filepath.stat().st_size
                     logger.info(f"单个文件: {filepath.name}, 大小: {file_size} 字节 ({file_size / 1024 / 1024:.2f} MB)")
@@ -1080,7 +1082,6 @@ class GitService:
                     base_dest = dest_dir / base_dest_name
 
                     files_to_iterate = []
-                    empty_dirs = []
                     for root, dirs, files in os.walk(filepath):
                         for name in files:
                             src_file = Path(root) / name
