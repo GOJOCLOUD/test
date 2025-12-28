@@ -785,6 +785,20 @@ class GitService:
             except Exception as e:
                 logger.warning(f"配置远程仓库失败: {e}")
             
+            logger.info(f"清理工作目录，确保全新上传...")
+            try:
+                for item in workdir.iterdir():
+                    if item.name != ".git":
+                        if item.is_dir():
+                            shutil.rmtree(item, ignore_errors=True)
+                            logger.info(f"已删除目录: {item.name}")
+                        else:
+                            item.unlink()
+                            logger.info(f"已删除文件: {item.name}")
+                logger.info(f"工作目录清理完成")
+            except Exception as e:
+                logger.warning(f"清理工作目录时出现警告: {e}")
+            
             logger.info(f"准备文件列表...")
             abs_filepaths = []
             for filepath in task.filepaths:
@@ -817,10 +831,6 @@ class GitService:
                     if (dest_dir / base_dest_name).exists() and task.conflict_strategy == ConflictStrategy.RENAME:
                         base_dest_name = GitService.get_unique_filename(dest_dir, base_dest_name)
                     base_dest = dest_dir / base_dest_name
-                    
-                    if base_dest.exists():
-                        logger.info(f"删除已存在的文件夹: {base_dest}")
-                        shutil.rmtree(base_dest, ignore_errors=True)
                     
                     files_to_iterate = []
                     empty_dirs = []
@@ -903,9 +913,10 @@ class GitService:
             logger.info(f"Git status --porcelain 返回码: {returncode}, 输出: {status_output[:500]}")
             
             if not status_output.strip():
-                logger.info("没有文件需要提交，跳过 commit 和 push")
-                task.status = "done"
-                task.progress = "没有文件需要提交"
+                error_msg = "没有文件需要提交，可能文件已被忽略或内容完全相同"
+                logger.error(error_msg)
+                task.status = "error"
+                task.error = error_msg
                 return
             
             returncode, stdout, stderr = await GitService._run_git_command(
