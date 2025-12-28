@@ -1043,8 +1043,16 @@ class GitService:
                     operation="clean"
                 )
                 logger.info(f"工作目录已重置")
+                
+                logger.info(f"同步远程仓库最新状态...")
+                await GitService._run_git_command(
+                    ["git", "pull", "--ff-only"],
+                    str(workdir),
+                    operation="pull"
+                )
+                logger.info(f"远程仓库已同步")
             except Exception as e:
-                logger.warning(f"重置工作目录时出现警告: {e}")
+                logger.warning(f"重置工作目录或同步远程仓库时出现警告: {e}")
 
             logger.info(f"准备文件列表...")
             abs_filepaths = []
