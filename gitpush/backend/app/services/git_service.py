@@ -818,6 +818,10 @@ class GitService:
                         base_dest_name = GitService.get_unique_filename(dest_dir, base_dest_name)
                     base_dest = dest_dir / base_dest_name
                     
+                    if base_dest.exists():
+                        logger.info(f"删除已存在的文件夹: {base_dest}")
+                        shutil.rmtree(base_dest, ignore_errors=True)
+                    
                     files_to_iterate = []
                     empty_dirs = []
                     for root, dirs, files in os.walk(filepath):
