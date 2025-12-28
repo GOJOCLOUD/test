@@ -1,0 +1,74 @@
+一、 架构重构：彻底解决“三层皮”
+目标：降噪、提速、解耦
+
+二选一架构（推荐方案 B）：
+
+方案 A（Rust 原生）： 移除 Python。使用 Rust 的 git2 库处理 Git 逻辑。优点：打包体积小、性能极致、安全性高。
+
+方案 B（FastAPI 核心）： 将 Python 逻辑封装为标准的 FastAPI 本地服务。Tauri 前端通过标准 HTTP/WebSocket 与其通信。
+
+动态路径管理：
+
+禁止硬编码： 使用环境变量或 Tauri 提供的 path API 获取用户目录。
+
+示例： let app_dir = tauri::api::path::app_data_dir(&config).unwrap();
+
+二、 逻辑去伪：实现真正的“系统级稳健”
+目标：真实数据反馈、闭环操作
+
+废除 Mock 检查：
+
+前端 exists 函数必须通过 invoke 调用后端文件系统 API。
+
+文件大小计算必须递归遍历目录：Python 用 os.walk，Rust 用 walkdir。
+
+实现真正的进程控制：
+
+后端记录 Python/Git 进程的 PID。
+
+前端点击“取消”时，发送信号（SIGTERM）彻底杀死对应 PID 的进程树，而不是仅仅改变 UI 状态。
+
+引入状态机：
+
+将上传过程定义为：IDLE -> INITIALIZING -> UPLOADING -> VERIFYING -> SUCCESS/FAIL。每个状态对应明确的 UI 反馈。
+
+三、 安全加固：保护用户数字资产
+目标：凭证加密、合规防御
+
+系统级秘钥存储：
+
+使用 Rust 插件 tauri-plugin-stronghold 或 Python 的 keyring 库，将 Token 存入 Windows 凭据管理器或 macOS Keychain。
+
+强制开启 CSP：
+
+在 tauri.conf.json 中配置严格的 csp 策略，仅允许访问 localhost 和特定的 GitHub API 域名。
+
+输入脱敏：
+
+在所有日志输出位置，使用正则匹配 Token 并强制替换为 ****。
+
+四、 性能优化：告别“盲盒上传”
+目标：透明度、资源保护
+
+实时进度条（WebSocket）：
+
+利用 FastAPI 的 StreamingResponse 或 WebSocket，将 git push --progress 的标准输出实时流化到前端。
+
+大文件预检：
+
+在上传前对比本地文件夹大小与 GitHub 剩余配额/限制，超过 100MB 强制提示用户检查 LFS（Large File Storage）配置。
+
+五、 交付标准化：从“Demo”走向“产品”
+目标：一致性、可维护性
+
+引入 TypeScript (TS)：
+
+强制为 React 前端引入 TS，定义 UploadConfig、FileStats 等接口，消除“假数据”产生的根源。
+
+统一语言包（i18n）：
+
+使用 react-i18next，将所有文案抽离到 zh.json 和 en.json，禁止在组件内直接写中文或英文。
+
+自动化清理策略：
+
+改进 cleanup 逻辑：根据 时间戳 或 任务 ID 清理，保留最近 3 次任务的缓存，防止并发冲突。
