@@ -12,7 +12,9 @@ router = APIRouter()
 @router.post("/scan", response_model=BaseResponse[FileScanResponse])
 async def scan_path(request: FileScanRequest):
     try:
+        logger.info(f"收到扫描请求: path={request.path}, type={type(request.path)}")
         result = FileService.scan_path(request.path)
+        logger.info(f"扫描完成: paths={result.paths}, exists={result.exists}, file_count={result.file_count}")
         return BaseResponse(data=result)
     except Exception as e:
         logger.error(f"扫描路径失败: {request.path}, 错误: {e}")

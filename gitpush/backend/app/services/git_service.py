@@ -83,7 +83,7 @@ class GitService:
     @staticmethod
     async def _run_git_command(args: List[str], cwd: str, capture_output: bool = True) -> Tuple[int, bytes, bytes]:
         """
-        在线程中执行同步 Git 命令（兼容 Windows）
+        在线程中执行同步 Git 命令
         返回: (returncode, stdout, stderr)
         """
         def run_sync():
@@ -101,7 +101,7 @@ class GitService:
     @staticmethod
     async def _run_git_process_async(args: List[str], cwd: str) -> subprocess.Popen:
         """
-        在线程中启动 Git 进程（兼容 Windows），返回 Popen 对象
+        在线程中启动 Git 进程，返回 Popen 对象
         """
         def start_process():
             return subprocess.Popen(

@@ -24,10 +24,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# PyInstaller
-*.manifest
-*.spec
-
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -60,7 +56,6 @@ venv.bak/
 
 # OS
 .DS_Store
-Thumbs.db
 
 # Logs
 *.log
