@@ -28,9 +28,13 @@ async def lifespan(app: FastAPI):
     logger.info(f"Data directory: {settings.DATA_DIR}")
     logger.info(f"Repos directory: {settings.REPOS_DIR}")
     
+    GitService.initialize()
+    logger.info("GitService 自动清理和监控任务已启动")
+    
     yield
     
     logger.info("Shutting down gracefully...")
+    GitService.shutdown()
     
     for task_id, task in list(GitService.process_registry.items()):
         if task.status == "running" and task.process:
