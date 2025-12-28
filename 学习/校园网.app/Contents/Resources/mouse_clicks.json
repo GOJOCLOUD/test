@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "total_steps": 4
+  },
+  "steps": [
+    {
+      "type": "click",
+      "x": 1202.5977,
+      "y": 367.1211,
+      "time_interval": 5.24,
+      "text": "2407380101"
+    },
+    {
+      "type": "click",
+      "x": 1198.7734,
+      "y": 396.8633,
+      "time_interval": 0.82,
+      "text": "Mjf2004092812"
+    },
+    {
+      "type": "click",
+      "x": 1227.6992,
+      "y": 516.9219,
+      "time_interval": 0.81
+    },
+    {
+      "type": "click",
+      "x": 521.9453,
+      "y": 138.7852,
+      "time_interval": 1.48
+    }
+  ]
+}
