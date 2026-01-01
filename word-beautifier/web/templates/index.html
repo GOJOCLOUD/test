@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word文档美化助手</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1><i class="fas fa-file-word"></i> Word文档美化助手</h1>
+      <p>上传一个 Word 文件，点击美化即可下载排版后的版本。</p>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <label class="upload-btn">
+          <i class="fas fa-folder-open"></i> 选择文件
+          <input type="file" id="fileInput" accept=".docx">
+        </label>
+
+        <button id="beautifyBtn" class="beautify-btn">
+          <i class="fas fa-magic"></i> 开始美化
+        </button>
+
+        <button id="downloadBtn" class="download-btn" disabled>
+          <i class="fas fa-download"></i> 下载结果
+        </button>
+      </div>
+
+      <div class="features">
+        <h3><i class="fas fa-star"></i> 功能特色</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> 自动优化文档排版</li>
+          <li><i class="fas fa-check-circle"></i> 统一字体和段落格式</li>
+          <li><i class="fas fa-check-circle"></i> 美化标题和列表样式</li>
+          <li><i class="fas fa-check-circle"></i> 优化表格和图片布局</li>
+        </ul>
+      </div>
+
+      <button id="clearCacheBtn" class="clear-btn">
+        <i class="fas fa-broom"></i> 清除缓存
+      </button>
+
+      <div id="selectedFile"></div>
+      <div id="status"></div>
+    </main>
+    
+    <footer>
+      <p>&copy; 2023 Word文档美化助手 | 让您的文档更专业</p>
+    </footer>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>
